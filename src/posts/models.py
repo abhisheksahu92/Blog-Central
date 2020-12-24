@@ -16,4 +16,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('posts:postdetails',kwargs={'id':self.id})
+
+    def get_absolute_url_update(self):
+        return reverse('posts:postupdate',kwargs={'id':self.id})
     
