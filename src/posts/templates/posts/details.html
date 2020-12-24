@@ -3,8 +3,10 @@
 
 {% block head_title %}{{query.title}}|{{ block.super }}{% endblock head_title %}
 {% block content %}
-    <h1>{{title}}</h1>
-    <a href="{{ query.get_absolute_url_update }}">{{ query.id }}</a>
+    <h1>{{title}}</h1><a href="{{ query.get_absolute_url_update }}">{{ query.id }}</a>
+    {% if query.image %}
+         <img src='{{ query.image.url }}' class='img-responsive' />
+    {% endif %}
     {{ query.title }}
     {{ query.content }}
     {{ query.created }}

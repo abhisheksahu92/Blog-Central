@@ -1,15 +1,43 @@
-{% extends 'posts/base.html' %}
+{% extends "posts/base.html" %}
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+
 {% block content %}
-{% for query in queryset%}
-    <ul class="thumbnails">
-      <li class="span4">
-        <div class="thumbnail">
-          <h3><a href="{{ query.get_absolute_url }}">{{ query.title }}</a><small>{{ query.updated }}</small></h3>
-          <p>{{query.content}}</p>
-        </div>
-      </li>
-      ...
-    </ul>
+<ul>
+<table style="width:100%">
+  <tr>
+    <th>Title</th>
+    <th>Content</th>
+    <th>Created</th>
+    <th>Last Updated</th>
+    <th>Actions</th>
+  </tr>
+  {% for obj in queryset%}
+  <tr>
+    <td><a class="nav-link" href = "{{ obj.get_absolute_url }}">{{obj.title }}<span class="sr-only">(current)</span></a></td>
+    <td>{{obj.content}}</td>
+    <td>{{obj.created}}</td>
+    <td>{{obj.updated | timesince}}</td>
+    <td><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+    <a href="{{ obj.get_absolute_url_update }}" class="btn btn-primary" role="button">Update</a>
+    <a href="{{ obj.get_absolute_url_delete }}" class="btn btn-primary" role="button">Delete</a></td>
+  </tr>
     {% endfor %}
+  
+</table>
+<div class="pagination">
+    <span class="step-links">
+        {% if queryset.has_previous %}
+            <a href="?{{ page_request_var }}={{ queryset.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}.
+        </span>
+
+        {% if queryset.has_next %}
+            <a href="?{{ page_request_var }}={{ queryset.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+        {% endif %}
+    </span>
+  </div>
 {% endblock content %}
-    

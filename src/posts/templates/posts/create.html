@@ -3,7 +3,7 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <h1> Create Post</h1>
-<form method="post" class="uniForm" action="">
+<form method="post" class="uniForm" action="" enctype="multipart/form-data">
   {% csrf_token %}
     {{ form|crispy }}
     <input type="submit" value="Create Post"/>

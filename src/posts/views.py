@@ -2,13 +2,14 @@ from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
+from django.core.paginator import Paginator
 from .models import Post
 from .forms import PostForm
 
 # Create your views here.
 
 def post_create(request):
-    form = PostForm(request.POST or None)
+    form = PostForm(request.POST or None,request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
@@ -19,7 +20,11 @@ def post_create(request):
 
 def post_list(request):
     qs_list = Post.objects.all()
-    context = {'queryset':qs_list,'title':'List of Posts'}
+    paginator = Paginator(qs_list, 5)
+    page_request_var = 'page'
+    page_number = request.GET.get(page_request_var)
+    page_obj = paginator.get_page(page_number)
+    context = {'queryset':page_obj,'title':'List of Posts','page_request_var':page_request_var}
     return render(request,template_name='posts/list.html',context=context)
 
 def post_details(request,id=None):
@@ -30,7 +35,7 @@ def post_details(request,id=None):
 
 def post_update(request,id=None):
     qs_update = get_object_or_404(Post,id=id)
-    form = PostForm(request.POST or None,instance=qs_update)
+    form = PostForm(request.POST or None,request.DATA or None,instance=qs_update)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
