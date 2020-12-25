@@ -1,6 +1,5 @@
 {% extends "posts/base.html" %} 
 {% block content %}
-{% load crispy_forms_tags %}
 <style>
     body {
         font-family: "Roboto", sans-serif;
@@ -33,12 +32,15 @@
     <div class="row">
         <!-- Blog Entries Column -->
         <div class="col-md-8 mt-3 left">
-        <h1> Create Post</h1>
-        <form method="post" class="uniForm" action="" enctype="multipart/form-data">
-        {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" value="Create Post"/>
-        </form>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Created by: Abhishek Sahu </h3>
+                    <h3 class="card-title">Email: abhisheksahu92@outlook.com </h3>
+                    <p>Follow US on <a class="card-text" href="#">Github</a>
+                    <a class="card-text" href="#">LinkedIn</a>
+                    </p>
+                </div>
+            </div>
         </div>
         {% block sidebar %} {% include 'posts/sidebar.html' %} {% endblock sidebar %}
     </div>

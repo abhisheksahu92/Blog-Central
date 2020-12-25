@@ -20,9 +20,12 @@ from posts import views
 app_name = 'posts'
 
 urlpatterns = [
+    path('',views.post_index,name='postindex'),
     path('create',views.post_create,name='postcreate'),
-    path('<int:id>',views.post_details,name='postdetails'),
-    path('<int:id>/edit',views.post_update,name='postupdate'),
     path('list',views.post_list,name='postlist'),
-    path('<int:id>/delete',views.post_delete,name='postdelete'),
+    path('contact',views.contact,name='contact'),
+    path('<slug:slug>',views.post_details,name='postdetails'),
+    path('<slug:slug>/edit',views.post_update,name='postupdate'),
+    path('<slug:slug>/delete',views.post_delete,name='postdelete'),
+
 ]

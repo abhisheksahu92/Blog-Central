@@ -22,9 +22,7 @@
         <div class="row">
             <div class=" col-md-13 col-md-14 mx-auto">
                 <div class="site-heading">
-
-                      <h3 class=" site-heading my-4 mt-3 text-white"> Welcome to {{request.user}} Blog </h3>
-                
+                    <h3 class=" site-heading my-4 mt-3 text-white"> Welcome to Blog </h3>
                 </div>
             </div>
         </div>
@@ -44,9 +42,6 @@
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-text text-muted h6">{{ post.user.get_full_name }} | {{ post.created}} </p>
                     <p class="card-text">{{post.content|slice:":200" }}</p>
-                    <a class="btn btn-primary" href = "{{ post.get_absolute_url }}">View<span class="sr-only">(current)</span></a>
-                    <a class="btn btn-primary" href = "{{ post.get_absolute_url_update }}">Update </a>
-                    <a class="btn btn-primary" href = "{{ post.get_absolute_url_delete }}">Delete</a>
                 </div>
             </div>
             {% endfor %}
