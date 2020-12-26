@@ -2,7 +2,7 @@
 
 Packed Used:
 
-asgiref==3.3.1
+asgiref==3.3.1<br/>
 beautifulsoup4==4.9.3
 bootstrap4==0.1.0
 Django==3.1.4
