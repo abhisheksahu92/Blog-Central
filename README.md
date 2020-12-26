@@ -1,6 +1,6 @@
 # TryDjango19
 
-Packed Used:
+# Packed Used:
 
 asgiref==3.3.1<br/>
 beautifulsoup4==4.9.3<br/>
@@ -14,7 +14,7 @@ pytz==2020.4<br/>
 soupsieve==2.1<br/>
 sqlparse==0.4.1<br/>
 
-#Steps:
+# Steps:
 
 1: Install Docker. <br/>
 2: Run docker compose up --build <br/>
