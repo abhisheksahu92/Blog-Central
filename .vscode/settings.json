@@ -1,4 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.pythonPath": "../trydjango19env/bin/python3"
+    "python.pythonPath": "../trydjango19env/bin/python3",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }

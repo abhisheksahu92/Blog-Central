@@ -1,9 +1,13 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+from markdown_deux import markdown
 from django.utils import timezone
 from django.conf import settings
+from comments.models import Comment
 
 class PostManager(models.Manager):
     def active(self,*args, **kwargs):
@@ -17,7 +21,7 @@ def upload_location(instance,filename):
 
 # Create your models here.
 class Post(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique = True)
     image = models.ImageField(upload_to = upload_location,
@@ -46,9 +50,28 @@ class Post(models.Model):
 
     def get_absolute_url_delete(self):
         return reverse('posts:postdelete',kwargs={"slug": self.slug})
-        
+
+    def get_markdown(self):
+        content = self.content
+        markdown_text = markdown(content)
+        return mark_safe(markdown_text)
+    
     class Meta:
         ordering = ['-updated','-created']
+
+    @property
+    def comment(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
+        
+    
     
 def pre_save_post_reciever(sender,instance,*args, **kwargs):
     slug = slugify(instance.title)
