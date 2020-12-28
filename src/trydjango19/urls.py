@@ -20,7 +20,9 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('posts/',include('posts.urls',namespace = 'posts'))
+    path('accounts/',include('accounts.urls',namespace = 'accounts')),
+    path('comments/',include('comments.urls',namespace = 'comments')),
+    path('posts/',include('posts.urls',namespace = 'posts')),
 ]
 
 if settings.DEBUG:

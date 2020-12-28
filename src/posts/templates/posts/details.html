@@ -7,6 +7,7 @@
     <div class="col-md-8 card mb-4  mt-3 left  top">
       <div class="card-body">
         <h1>{% block head_title %}{{query.title}}{% endblock head_title %}</h1>
+        <p>Read time: {% if query.read_time <= 1 %} < 1 Minute {% else %}{{ query.read_time }} minutes {% endif %}</p>
         {% if query.image %}
         <img src='{{ query.image.url }}'width="650" height="400"/>
         {% endif %}
@@ -17,7 +18,7 @@
         </p>
         <div class= 'post-detail-item'>{{ query.get_markdown }}</div>
         {% if query.user.get_full_name %}
-            <p class=" text-muted">Author: {{ query.author }} | {{ query.publish }} | {{query.id}}</p>
+            <p class=" text-muted">Author: {{ query.author }} | {{ query.publish }}</p>
         {% endif %}
 
 
@@ -38,25 +39,26 @@
                     <h3 class="card-title">{{ comment.user.get_full_name}}</h3>
                     <p class="card-text text-muted h6">{{ comment.timestamp}} </p>
                     <p class="card-text">{{ comment.content }}</p>
-                    {% if request.user.is_authenticated %}
-                      <form method="POST" action=""> {% csrf_token %}
-                          {{ comment_form|crispy }}
-                          <input type='hidden' name='parent_id' value='{{ comment.id }}'>
-                          <input type='submit' value='Reply' class='btn btn-default'>
-                      </form>
-                    {% else %}
-                      <p>You must login to comment </p>
-                    {% endif %} 
+                      
                     <footer>{% if comment.children.count > 0 %}{{ comment.children.count }} Comment{% if comment.children.count > 1 %}s{% endif %} | {% endif %} <a class='comment-reply-btn' href='#'>Reply</a> | <a class='' href='{{ comment.get_absolute_url }}'>Thread</a></footer>
-                    {% for child_comment in comment.children %}
-                    <div class="alert alert-primary" role="alert">
-                      <p>{{ child_comment.content }}</p>
-                      <footer>via {{ child_comment.user.get_full_name }} | {{ child_comment.timestamp|timesince }} ago</footer>
+                    <div class='comment-reply' style='display:none;'>
+                      {% for child_comment in comment.children %}
+                        <div class="alert alert-primary" role="alert">
+                          <p>{{ child_comment.content }}</p>
+                          <footer>via {{ child_comment.user.get_full_name }} | {{ child_comment.timestamp|timesince }} ago</footer>
+                        </div>
+                        <hr/>
+                      {% endfor %}
+                      {% if request.user.is_authenticated %}
+                        <form method="POST" action=""> {% csrf_token %}
+                            {{ comment_form|crispy }}
+                            <input type='hidden' name='parent_id' value='{{ comment.id }}'>
+                            <input type='submit' value='Reply' class='btn btn-default'>
+                        </form>
+                      {% else %}
+                        <p>You must login to comment </p>
+                      {% endif %} 
                     </div>
-                      <hr/>
-                    {% endfor %}
-                    
-
                 </div>
           </div>
         {% endfor %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #Local Apps
     'posts',
     'comments',
+    'accounts',
 
     #Third-party 
     'markdown_deux',

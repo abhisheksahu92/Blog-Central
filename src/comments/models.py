@@ -8,7 +8,7 @@ from django.db import models
 
 class CommentManager(models.Manager):
     def all(self):
-        qs = super(CommentManager.self).filter(parent=None)
+        qs = super(CommentManager,self).filter(parent=None)
         return qs
 
     def filter_by_instance(self, instance):
@@ -41,6 +41,12 @@ class Comment(models.Model):
 
     def children(self):
         return Comment.objects.filter(parent=self)
+
+    def get_absolute_url(self):
+        return reverse("comments:thread", kwargs={"id": self.id})
+
+    def get_delete_url(self):
+        return reverse("comments:delete", kwargs={"id": self.id})
 
     @property
     def is_parent(self):
