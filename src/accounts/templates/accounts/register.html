@@ -1,1 +1,23 @@
-<h1>Hello</h1>
+{% extends 'accounts/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block content %}
+{% for message in messages %}
+    <div class="alert alert-success">
+    <a class="close" href="#" data-dismiss="alert">×</a>
+    {{ message }}
+    </div>
+{% endfor %}
+{% if registered %}
+        <h1>Thank you for registering!</h1>
+{% else %}
+<form method = 'POST' action = ''> {% csrf_token %}
+{{form|crispy}}
+<input type="submit" class="btn btn-primary" value="Register"></input>
+</form>
+ {% endif %}
+{% endblock content %}
