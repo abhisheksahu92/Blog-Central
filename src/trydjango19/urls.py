@@ -23,6 +23,7 @@ urlpatterns = [
     path('accounts/',include('accounts.urls',namespace = 'accounts')),
     path('comments/',include('comments.urls',namespace = 'comments')),
     path('posts/',include('posts.urls',namespace = 'posts')),
+    path('api/posts/',include('posts.api.urls',namespace = 'posts-api')),
 ]
 
 if settings.DEBUG:
