@@ -67,13 +67,15 @@ def post_list(request):
     return render(request,template_name='posts/list.html',context=context)
 
 def post_details(request,slug=None):
-    qs_details = get_object_or_404(Post,slug=slug)
+    queryset = Post.objects.filter(slug=slug)
+    if not queryset.exists():
+        Http404
+    qs_details = queryset[0]
     if qs_details.draft or qs_details.publish > timezone.now().date():
         if not request.user.is_authenticated:
             return HttpResponse('You are not authenticated')
-
-    qs_details.views_count = F('views_count') + 1
-    qs_details.save()
+    if request.method == 'GET':
+        queryset.update(views_count = F('views_count') + 1)
     qs_details.refresh_from_db()
 
     initial_data = {'content_type':qs_details.get_content_type,'object_id':qs_details.id}
