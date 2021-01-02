@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q,F
 from django.core.paginator import Paginator
 from django.utils import timezone
 
@@ -71,6 +71,11 @@ def post_details(request,slug=None):
     if qs_details.draft or qs_details.publish > timezone.now().date():
         if not request.user.is_authenticated:
             return HttpResponse('You are not authenticated')
+
+    qs_details.views_count = F('views_count') + 1
+    qs_details.save()
+    qs_details.refresh_from_db()
+
     initial_data = {'content_type':qs_details.get_content_type,'object_id':qs_details.id}
     form = CommentForm(request.POST or None,initial=initial_data)
     if form.is_valid():

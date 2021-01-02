@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--user',
-                            default=50,
+                            default=10,
                             type=int,
                             help='The number of user you want to create.')
 
@@ -29,9 +29,12 @@ class Command(BaseCommand):
                 username = profile.get('username')
                 first_name, last_name = profile.get('name').split(' ', 1)
                 email = profile.get('mail')
-                password = profile.get('name').replace(' ', '').title() + '@' + '123'
+                #password = profile.get('name').replace(' ', '').title() + '@' + '123'
+                password = 'Namrata@1215'
                 User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email,
-                                         password=password)
+                                         password=password,
+                                         is_staff= True,
+                                         is_active=True)
             logger.info(f'{x + 1} User Data Created')
         except Exception as e:
             logger.info(f'User Creation Error: {e}')

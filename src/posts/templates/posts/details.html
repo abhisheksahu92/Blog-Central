@@ -7,7 +7,7 @@
     <div class="col-md-8 card mb-4  mt-3 left  top">
       <div class="card-body">
         <h1>{% block head_title %}{{query.title}}{% endblock head_title %}</h1>
-        <p>Read time: {% if query.read_time <= 1 %} < 1 Minute {% else %}{{ query.read_time }} minutes {% endif %}</p>
+        <p>Read time: {% if query.read_time <= 1 %} < 1 Minute {% else %}{{ query.read_time }} minutes {% endif %}| Views: {{ query.views_count }}</p>
         {% if query.image %}
         <img src='{{ query.image.url }}'width="650" height="400"/>
         {% endif %}
