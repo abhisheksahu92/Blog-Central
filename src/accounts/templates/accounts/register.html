@@ -1,23 +1,27 @@
-{% extends 'accounts/base.html' %}
-{% load crispy_forms_tags %}
-
-{% block title %}
-{{title}}
-{% endblock title %}
+{% extends "posts/base.html" %}
+{% block head_extra %}
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+<meta content="notranslate" name="google"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      rel="stylesheet"/>
+<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear" rel="stylesheet"
+      type="text/css"/>
+{% endblock head_extra %}
 
 {% block content %}
-{% for message in messages %}
-    <div class="alert alert-success">
-    <a class="close" href="#" data-dismiss="alert">×</a>
-    {{ message }}
-    </div>
-{% endfor %}
-{% if registered %}
-        <h1>Thank you for registering!</h1>
-{% else %}
-<form method = 'POST' action = ''> {% csrf_token %}
-{{form|crispy}}
-<input type="submit" class="btn btn-primary" value="Register"></input>
-</form>
- {% endif %}
+<!-- Content Goes here -->
+{% load crispy_forms_tags %}
+<div id="page">
+
+        <form method='POST'> {% csrf_token %}
+            {{form|crispy}}
+            <input type="submit" class="btn btn-primary" value ='Register'></input>
+        </form>
+
+</div>
+<div id="footer">
+    <p>&copy; Untitled. | Design by Abhishek Sahu.</p>
+</div>
 {% endblock content %}

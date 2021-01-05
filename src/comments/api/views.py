@@ -44,6 +44,7 @@ class CommentListApiView(ListAPIView):
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['content','user__first_name']
     pagination_class = CommentPageNumberPagination
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         qs_list = Comment.objects.all().order_by('timestamp')

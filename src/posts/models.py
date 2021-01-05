@@ -49,7 +49,7 @@ class Post(models.Model):
         return self.title
 
     def get_api_url(self):
-        return reverse("comments-api:commentdetailapi", kwargs={"id": self.id})
+        return reverse("posts-api:postapidetails", kwargs={"slug": self.slug})
 
     def get_absolute_url(self):
         return reverse('posts:postdetails',kwargs={"slug": self.slug})

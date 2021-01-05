@@ -3,6 +3,8 @@ from rest_framework.serializers import ModelSerializer,HyperlinkedIdentityField,
 
 #django modules
 from comments.models import Comment
+from accounts.api.serializer import UserDetailSerializer
+
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 
@@ -65,11 +67,8 @@ class CommentListSerializer(ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id',
-                  'content_type',
-                  'object_id',
                   'content',
                   'timestamp',
-                  'parent',
                   'reply_count',
                   'comment_url'
                   ]
@@ -81,30 +80,40 @@ class CommentListSerializer(ModelSerializer):
 
 
 class CommentChildSerializer(ModelSerializer):
+    user = UserDetailSerializer(read_only =True)
     class Meta:
         model = Comment
         fields = ['id',
+                  'user',
                   'content',
                   'timestamp',
                   ]
 
 class CommentDetailSerializer(ModelSerializer):
+    user = UserDetailSerializer(read_only =True)
+    content_object_url = SerializerMethodField()
     reply_count = SerializerMethodField()
     replies = SerializerMethodField()
     class Meta:
         model = Comment
         fields = ['id',
-                  'content_type',
-                  'object_id',
+                  'user',
                   'content',
                   'timestamp',
                   'reply_count',
-                  'replies'
+                  'replies',
+                  'content_object_url'
                   ]
         read_only_fields = [
             'reply_count',
             'replies'
         ]
+
+    def get_content_object_url(self,obj):
+        try:
+            return obj.content_object.get_api_url()
+        except:
+            return None
 
     def get_replies(self,obj):
         if obj.is_parent:

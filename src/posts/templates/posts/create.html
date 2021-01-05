@@ -1,54 +1,27 @@
-{% extends "posts/base.html" %} 
-
+{% extends "posts/base.html" %}
 {% block head_extra %}
-
-{{ form.media }}
-
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+<meta content="notranslate" name="google"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      rel="stylesheet"/>
+<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear" rel="stylesheet"
+      type="text/css"/>
 {% endblock head_extra %}
 
 {% block content %}
+<!-- Content Goes here -->
 {% load crispy_forms_tags %}
-<style>
-    body {
-        font-family: "Roboto", sans-serif;
-        font-size: 18px;
-        background-color: #fdfdfd;
-    }
-    
-    .head_text {
-        color: white;
-    }
-    
-    .card {
-        box-shadow: 0 16px 48px #E3E7EB;
-    }
-</style>
+<div id="page">
 
-<header class="masthead">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class=" col-md-13 col-md-14 mx-auto">
-                <div class="site-heading">
-                    <h3 class=" site-heading my-4 mt-3 text-white"> Welcome to Blog </h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<div class="container">
-    <div class="row">
-        <!-- Blog Entries Column -->
-        <div class="col-md-8 mt-3 left">
-        <h1> Create Post</h1>
-        <form method="post" class="uniForm" action="" enctype="multipart/form-data">
-        {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" value="Create Post"/>
+        <form method='POST'> {% csrf_token %}
+            {{form|crispy}}
+            <input type="submit" class="btn btn-primary" value ='Submit'></input>
         </form>
-        </div>
-        {% block sidebar %} {% include 'posts/sidebar.html' %} {% endblock sidebar %}
-    </div>
-</div>
 
-{%endblock%}
+</div>
+<div id="footer">
+    <p>&copy; Untitled. | Design by Abhishek Sahu.</p>
+</div>
+{% endblock content %}
