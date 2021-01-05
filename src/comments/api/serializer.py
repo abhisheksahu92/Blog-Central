@@ -63,14 +63,12 @@ def create_comment_serializer(model_type='post', slug=None, parent_id=None, user
 
 class CommentListSerializer(ModelSerializer):
     reply_count = SerializerMethodField()
-    comment_url = comment_detail_url
     class Meta:
         model = Comment
         fields = ['id',
                   'content',
                   'timestamp',
-                  'reply_count',
-                  'comment_url'
+                  'reply_count'
                   ]
 
     def get_reply_count(self,obj):
