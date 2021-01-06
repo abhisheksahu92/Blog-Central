@@ -10,8 +10,8 @@ A blog platorm to view,update,create and delete the blogs using web browser or R
 
 # URLs
 
-1: to list all blogs:            http://127.0.0.1:8000/posts/
-2: to list all your blogs:       http://127.0.0.1:8000/posts/list
-3: to create new blogs:          http://127.0.0.1:8000/posts/create
-4: to register new user:         http://127.0.0.1:8000/accounts/register
-4: to login into your account:   http://127.0.0.1:8000/accounts/login
+1: to list all blogs:            http://127.0.0.1:8000/posts/<br/>
+2: to list all your blogs:       http://127.0.0.1:8000/posts/list<br/>
+3: to create new blogs:          http://127.0.0.1:8000/posts/create<br/>
+4: to register new user:         http://127.0.0.1:8000/accounts/register<br/>
+4: to login into your account:   http://127.0.0.1:8000/accounts/login<br/>
