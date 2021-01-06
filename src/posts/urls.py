@@ -21,6 +21,7 @@ app_name = 'posts'
 
 urlpatterns = [
     path('',views.post_index,name='postindex'),
+    path('<slug:slug>/',views.post_index,name='postindexcategory'),
     path('create',views.post_create,name='postcreate'),
     path('list',views.post_list,name='postlist'),
     path('contact',views.contact,name='contact'),

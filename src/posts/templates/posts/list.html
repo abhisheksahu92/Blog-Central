@@ -15,7 +15,7 @@
 						<div style="clear: both;">&nbsp;</div>
 						<div class="entry">
 							<p>{{ post.get_markdown | truncatechars_html:450 }}</p>
-							<p class="links"><a href = "{{ post.get_absolute_url }}" class="button">Read More</a></p>
+							<p class="links"><a href = "{{ post.get_absolute_url }}" class="button">Read More</a></p>   <p class="links"><a href = "{{ post.get_absolute_url_update }}" class="button">Update</a></p>   <p class="links"><a href = "{{ post.get_absolute_url_delete }}" class="button">Delete</a></p>
 						</div>
 					</div>
 					{% endfor %}
@@ -52,40 +52,20 @@
 							<div style="clear: both;">&nbsp;</div>
 						</li>
 						<li>
-							<h2>Aliquam tempus</h2>
-							<p>Mauris vitae nisl nec metus placerat perdiet est. Phasellus dapibus semper consectetuer hendrerit.</p>
-						</li>
-						<li>
 							<h2>Categories</h2>
 							<ul>
-								<li><a href="#">Aliquam libero</a></li>
-								<li><a href="#">Consectetuer adipiscing elit</a></li>
-								<li><a href="#">Metus aliquam pellentesque</a></li>
-								<li><a href="#">Suspendisse iaculis mauris</a></li>
-								<li><a href="#">Urnanet non molestie semper</a></li>
-								<li><a href="#">Proin gravida orci porttitor</a></li>
-							</ul>
-						</li>
-						<li>
-							<h2>Blogroll</h2>
-							<ul>
-								<li><a href="#">Aliquam libero</a></li>
-								<li><a href="#">Consectetuer adipiscing elit</a></li>
-								<li><a href="#">Metus aliquam pellentesque</a></li>
-								<li><a href="#">Suspendisse iaculis mauris</a></li>
-								<li><a href="#">Urnanet non molestie semper</a></li>
-								<li><a href="#">Proin gravida orci porttitor</a></li>
-							</ul>
-						</li>
-						<li>
-							<h2>Archives</h2>
-							<ul>
-								<li><a href="#">Aliquam libero</a></li>
-								<li><a href="#">Consectetuer adipiscing elit</a></li>
-								<li><a href="#">Metus aliquam pellentesque</a></li>
-								<li><a href="#">Suspendisse iaculis mauris</a></li>
-								<li><a href="#">Urnanet non molestie semper</a></li>
-								<li><a href="#">Proin gravida orci porttitor</a></li>
+								<li><a href="#">General</a></li>
+								<li><a href="#">Music</a></li>
+								<li><a href="#">Tavel</a></li>
+								<li><a href="#">Photography</a></li>
+								<li><a href="#">Technology</a></li>
+								<li><a href="#">Fashion</a></li>
+								<li><a href="#">Car</a></li>
+								<li><a href="#">Design</a></li>
+								<li><a href="#">Movie</a></li>
+								<li><a href="#">History</a></li>
+								<li><a href="#">Education</a></li>
+								<li><a href="#">Lifestyle</a></li>
 							</ul>
 						</li>
 					</ul>

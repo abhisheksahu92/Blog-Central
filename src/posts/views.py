@@ -17,8 +17,10 @@ from comments.forms import CommentForm
 
 # Create your views here.
 
-def post_index(request):
+def post_index(request,slug = None):
     qs_list = Post.objects.all()
+    if slug is not None:
+        qs_list = Post.objects.filter(category__icontains=slug)
     query = request.GET.get("q")
     if query:
         qs_list = qs_list.filter(
@@ -27,7 +29,7 @@ def post_index(request):
             Q(user__first_name__icontains=query) |
             Q(user__last_name__icontains=query)
         ).distinct()
-    paginator = Paginator(qs_list, 4)
+    paginator = Paginator(qs_list, 3)
     page_request_var = 'page'
     page_number = request.GET.get(page_request_var)
     page_obj = paginator.get_page(page_number)

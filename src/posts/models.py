@@ -24,6 +24,12 @@ def upload_location(instance,filename):
 
 # Create your models here.
 class Post(models.Model):
+
+    category_choices = (('general', 'General'), ('music', 'Music'), ('travel', 'Travel'), ('photography', 'Photography'),
+                     ('fashion', 'Fashion'), ('automobile', 'Automobile'), ('design', 'Design'),
+                     ('movie', 'Movie'), ('history', 'History'), ('education', 'Education'), ('lifestyle', 'Lifestyle')
+                     )
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique = True)
@@ -32,6 +38,7 @@ class Post(models.Model):
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
     draft = models.BooleanField(default = False)
+    category = models.CharField(verbose_name = 'Category',choices = category_choices,default = 'general',max_length=120)
     publish = models.DateField(auto_now=False, auto_now_add=False)
     read_time = models.IntegerField(default=0)
     views_count = models.IntegerField(default=0)
@@ -54,11 +61,17 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('posts:postdetails',kwargs={"slug": self.slug})
 
+    def get_absolute_url_category(self):
+        return reverse('posts:postdetails',kwargs={"slug": self.slug})
+
     def get_absolute_url_update(self):
         return reverse('posts:postupdate',kwargs={"slug": self.slug})
 
     def get_absolute_url_delete(self):
         return reverse('posts:postdelete',kwargs={"slug": self.slug})
+
+    def get_absolute_url_index(self):
+        return reverse('posts:postdetails',kwargs={"slug": self.slug})
 
     def get_markdown(self):
         content = self.content
