@@ -1,0 +1,25 @@
+{% extends "posts/base.html" %} 
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1>Confirm Delete</h1>
+                <form method="POST" action=""> {% csrf_token %}
+                    <p>Are you sure you want to delete: "{{ comment_delete.content }}"?</p>
+                    <input type='submit' value='Confirm' class='btn btn-warning'>
+                    <a href='{{ comment_delete.get_absolute_url }}' class='btn btn-default'>Cancel</a>
+                </form>
+                <hr/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

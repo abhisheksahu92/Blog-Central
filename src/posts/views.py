@@ -2,18 +2,34 @@ from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,Http404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q,F
 from django.core.paginator import Paginator
 from django.utils import timezone
+
 from .models import Post
 from .forms import PostForm
 
+from comments.models import Comment
+from comments.forms import CommentForm
+
+
 # Create your views here.
 
-def post_index(request):
+def post_index(request,slug = None):
     qs_list = Post.objects.all()
-    paginator = Paginator(qs_list, 5)
+    if slug is not None:
+        qs_list = Post.objects.filter(category__icontains=slug)
+    query = request.GET.get("q")
+    if query:
+        qs_list = qs_list.filter(
+            Q(title__icontains=query)|
+            Q(content__icontains=query)|
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query)
+        ).distinct()
+    paginator = Paginator(qs_list, 3)
     page_request_var = 'page'
     page_number = request.GET.get(page_request_var)
     page_obj = paginator.get_page(page_number)
@@ -37,6 +53,14 @@ def post_list(request):
     if not request.user.is_authenticated:
         return HttpResponse('You are not authenticated')
     qs_list = Post.objects.filter(user=request.user)
+    query = request.GET.get("q")
+    if query:
+        qs_list = qs_list.filter(
+            Q(title__icontains=query)|
+            Q(content__icontains=query)|
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query)
+        ).distinct()
     paginator = Paginator(qs_list, 5)
     page_request_var = 'page'
     page_number = request.GET.get(page_request_var)
@@ -45,11 +69,47 @@ def post_list(request):
     return render(request,template_name='posts/list.html',context=context)
 
 def post_details(request,slug=None):
-    qs_details = get_object_or_404(Post,slug=slug)
+    queryset = Post.objects.filter(slug=slug)
+    if not queryset.exists():
+        Http404
+    qs_details = queryset[0]
     if qs_details.draft or qs_details.publish > timezone.now().date():
         if not request.user.is_authenticated:
             return HttpResponse('You are not authenticated')
-    context = {'query':qs_details,'title':qs_details.title}
+    if request.method == 'GET':
+        queryset.update(views_count = F('views_count') + 1)
+    qs_details.refresh_from_db()
+
+    initial_data = {'content_type':qs_details.get_content_type,'object_id':qs_details.id}
+    form = CommentForm(request.POST or None,initial=initial_data)
+    if form.is_valid():
+        c_type = form.cleaned_data.get("content_type")
+        app_label,model_label = c_type.split('|')
+        content_type = ContentType.objects.get(app_label__iexact=app_label.strip(), model__iexact=model_label.strip())
+        obj_id = form.cleaned_data.get('object_id')
+        content_data = form.cleaned_data.get("content")
+        parent_obj = None
+        try:
+            parent_id = int(request.POST.get('parent_id'))
+        except:
+            parent_id = None
+        
+        if parent_id:
+            parent_qs = Comment.objects.filter(id=parent_id)
+            if parent_qs.exists() and parent_qs.count() == 1:
+                parent_obj = parent_qs.first()
+
+        new_comment,created = Comment.objects.get_or_create(
+                                    user = request.user,
+                                    content_type = content_type,
+                                    object_id = obj_id,
+                                    content =content_data,
+                                    parent = parent_obj,
+        )
+        return HttpResponseRedirect(new_comment.content_object.get_absolute_url())
+
+    comments = qs_details.comment
+    context = {'query':qs_details,'title':qs_details.title,'comments':comments,'comment_form':form}
     return render(request,template_name='posts/details.html',context=context)
 
 def post_update(request,slug=None):

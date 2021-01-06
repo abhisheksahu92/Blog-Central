@@ -1,0 +1,49 @@
+{% extends "posts/base.html" %} 
+{% block content %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+    
+    .head_text {
+        color: white;
+    }
+    
+    .card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+</style>
+
+<header class="masthead">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class=" col-md-13 col-md-14 mx-auto">
+                <div class="site-heading">
+                    <h3 class=" site-heading my-4 mt-3 text-white"> Welcome to Blog </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8 mt-3 left">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Created by: Abhishek Sahu </h3>
+                    <h3 class="card-title">Email: abhisheksahu92@outlook.com </h3>
+                    <p>Follow US on <a class="card-text" href="#">Github</a>
+                    <a class="card-text" href="#">LinkedIn</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% block sidebar %} {% include 'posts/sidebar.html' %} {% endblock sidebar %}
+    </div>
+</div>
+
+{%endblock%}

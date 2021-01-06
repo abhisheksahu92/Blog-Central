@@ -17,10 +17,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('posts/',include('posts.urls',namespace = 'posts'))
+    path('accounts/',include('accounts.urls',namespace = 'accounts')),
+    path('comments/',include('comments.urls',namespace = 'comments')),
+    path('posts/',include('posts.urls',namespace = 'posts')),
+    path('api/auth/token', obtain_jwt_token),
+    path('api/posts/',include('posts.api.urls',namespace = 'posts-api')),
+    path('api/comments/',include('comments.api.urls',namespace = 'comments-api')),
+    path('api/user/',include('accounts.api.urls',namespace = 'users-api')),
 ]
 
 if settings.DEBUG:
