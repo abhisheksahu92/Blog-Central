@@ -3,11 +3,7 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-<div id="wrapper">
-    <!-- end #header -->
-    <div id="page">
-        <div id="page-bgtop">
-            <div id="page-bgbtm">
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-20 card mb-4  mt-3 left  top">
@@ -35,7 +31,7 @@
                                             <form action="" method="POST"> {% csrf_token %}
                                                 {{ form|crispy }}
                                                 <input name='parent_id' type='hidden' value='{{ comment.id }}'>
-                                                <input class='btn btn-default' type='submit' value='Reply'>
+                                                <input class='mb-2 tm-btn tm-btn-primary tm-prev-next' type='submit' value='Reply'>
                                             </form>
                                             {% else %}
                                             <p>You must login to comment </p>
@@ -47,9 +43,5 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 {% endblock content %}

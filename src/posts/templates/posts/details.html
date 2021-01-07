@@ -6,21 +6,20 @@
     <div class="col-lg-9 tm-post-col">
         <div class="tm-post-full">
             <div class="mb-4">
-                {% if query.image %}
+
                     <a href="#" class="effect-lily tm-post-link tm-pt-20">
-                    <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ query.title }}</h2>
+
                     <div class="tm-post-link-inner">
+                        {% if query.image %}
                     <img src="{{ query.image.url }}" alt="Image" class="img-fluid">
+                        {% else %}
+                        <img src="{% static 'img/img-05.jpg' %}" alt="Image" class="img-fluid">
+                        {% endif %}
                     </div>
+                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ query.title }}</h2>
                     </a>
-                {% else %}
-                <a href="#" class="effect-lily tm-post-link tm-pt-20">
-                    <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ query.title }}</h2>
-                            <div class="tm-post-link-inner">
-                                <img src="{% static 'img/img-05.jpg' %}" alt="Image" class="img-fluid">
-                            </div>
-                </a>
-                {% endif %}
+
+
                 <p class="tm-mb-40">{{ query.publish }} posted by <strong>{{ query.user.get_full_name }}</strong></p>
                 <p>{{ query.content }}</p>
                 <p>
@@ -28,7 +27,12 @@
                         <span style='color:red;'>Draft</span>
                     {% endif %}
                 </p>
-                <span class="d-block text-right tm-color-primary">Category: <a href="{% url 'posts:postindexcategory' slug=query.category %}" class="tm-color-primary">{{ query.category|title }}</a></span>
+                <div class="d-flex justify-content-between">
+                    <span class="mb-2 tm-btn tm-btn-primary tm-prev-next"><a href="{{ query.get_absolute_url_update }}" class="tm-color-primary">Update</a></span>
+                    <span class="mb-2 tm-btn tm-btn-primary tm-prev-next"><a href="{{ query.get_absolute_url_delete }}" class="tm-color-primary">Delete</a></span>
+                    <span class="mb-2 tm-btn tm-btn-primary tm-prev-next"><a href="{% url 'posts:postindexcategory' slug=query.category %}" class="tm-color-primary">Category: {{ query.category|title }}</a></span>
+                </div>
+
             </div>
 
             <!-- Comments -->
@@ -39,8 +43,8 @@
                     <div class="card mb-4">
                     <div class="card-body">
                     <h3 class="card-title">{{ comment.user.get_full_name}}</h3>
-                    <p> class="card-text text-muted h6">{{ comment.timestamp}} </p>
-                    <p> class="card-text">{{ comment.content }}</p>
+                    <p class="card-text text-muted h6">{{ comment.timestamp}} </p>
+                    <p class="card-text">{{ comment.content }}</p>
 
                     <footer>{% if comment.children.count > 0 %}{{ comment.children.count }}
                     Comment{% if comment.children.count > 1 %}s{% endif %} | {% endif %} <a
@@ -60,7 +64,7 @@
                     <form action="" method="POST"> {% csrf_token %}
                         {{ comment_form|crispy }}
                         <input name='parent_id' type='hidden' value='{{ comment.id }}'>
-                        <input class='btn btn-default' type='submit' value='Reply'>
+                        <input class='mb-2 tm-btn tm-btn-primary tm-prev-next' type='submit' value='Reply'>
                     </form>
                     {% else %}
                     <p>You must login to comment </p>
@@ -69,22 +73,16 @@
                     </div>
                     </div>
                 {% endfor %}
+                {% if request.user.is_authenticated %}
+                    <form action="" method="POST"> {% csrf_token %}
+                        {{ comment_form|crispy }}
+                        <input name='parent_id' type='hidden' value='{{ comment.id }}'>
+                        <input class='mb-2 tm-btn tm-btn-primary tm-prev-next' type='submit' value='Reply'>
+                    </form>
+                    {% else %}
+                    <p>You must login to comment </p>
+                    {% endif %}
 
-                <form action="" class="mb-5 tm-comment-form">
-                    <h2 class="tm-color-primary tm-post-title mb-4">Your comment</h2>
-                    <div class="mb-4">
-                        <input class="form-control" name="name" type="text">
-                    </div>
-                    <div class="mb-4">
-                        <input class="form-control" name="email" type="text">
-                    </div>
-                    <div class="mb-4">
-                        <textarea class="form-control" name="message" rows="6"></textarea>
-                    </div>
-                    <div class="text-right">
-                        <button class="tm-btn tm-btn-primary tm-btn-small">Submit</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -108,24 +106,19 @@
             </ul>
             <hr class="mb-3 tm-hr-primary">
             <h2 class="tm-mb-40 tm-post-title tm-color-primary">Related Posts</h2>
-            <a href="#" class="d-block tm-mb-40">
+            {% for category in queryset_category %}
+            <a href="{{ post.get_absolute_url }}" class="d-block tm-mb-40">
                 <figure>
-                    <img src="img/img-02.jpg" alt="Image" class="mb-3 img-fluid">
-                    <figcaption class="tm-color-primary">Duis mollis diam nec ex viverra scelerisque a sit</figcaption>
+                    {% if post.image %}
+                    <img src="{{ query.image.url }}" alt="Image" class="mb-3 img-fluid">
+                    {% else %}
+                    <img src="{% static 'img/img-05.jpg' %}" alt="Image" class="img-fluid">
+                    {% endif %}
+                    <figcaption class="tm-color-primary">{{ category.title }}</figcaption>
+                    <figcaption class="tm-color-primary">{{ category.get_markdown | truncatechars_html:100 }}</figcaption>
                 </figure>
             </a>
-            <a href="#" class="d-block tm-mb-40">
-                <figure>
-                    <img src="img/img-05.jpg" alt="Image" class="mb-3 img-fluid">
-                    <figcaption class="tm-color-primary">Integer quis lectus eget justo ullamcorper ullamcorper</figcaption>
-                </figure>
-            </a>
-            <a href="#" class="d-block tm-mb-40">
-                <figure>
-                    <img src="img/img-06.jpg" alt="Image" class="mb-3 img-fluid">
-                    <figcaption class="tm-color-primary">Nam lobortis nunc sed faucibus commodo</figcaption>
-                </figure>
-            </a>
+            {% endfor %}
         </div>
     </aside>
 </div>

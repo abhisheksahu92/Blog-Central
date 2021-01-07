@@ -6,8 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserLoginForm,UserRegisterForm
+from faker import Faker
+import logging
+import logging.config
 
 # Create your views here.
+
+logging.config.fileConfig(fname='logs/log.conf')
+logger = logging.getLogger('accounts')
 
 def login_view(request):
     form = UserLoginForm(request.POST or None)
@@ -18,8 +24,10 @@ def login_view(request):
         user = authenticate(username = username,password = password)
         if user:
             login(request,user)
+            logger.info(f'{request.user} authenticated')
             return HttpResponseRedirect(reverse('posts:postindex'))
         else:
+            logger.warning(f'Invalid Credentials')
             messages.error(request,'Invalid Credentials')
             return HttpResponseRedirect(reverse('accounts:login'))
 
@@ -39,7 +47,7 @@ def register_view(request):
             if User.objects.filter(username=username).exists():
                 messages.success(request,'User already exits. Please Login')
             else:
-                User.objects.create_user(
+                user = User.objects.create_user(
                     username = username,
                     email=email,
                     password=password,
@@ -47,6 +55,7 @@ def register_view(request):
                     last_name = last_name
 
                 )
+                logger.info(f'New User got created with {user.username}')
                 messages.success(request,'Registration is Done.')
             return HttpResponseRedirect(reverse('accounts:login'))
     else:
@@ -57,5 +66,6 @@ def register_view(request):
 
 @login_required
 def logout_view(request):
+    logger.info(f'{request.user} logged out.')
     logout(request)
     return HttpResponseRedirect(reverse('posts:postindex'))

@@ -2,12 +2,17 @@ from django.shortcuts import render,get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib import messages
+import logging
+import logging.config
 
 
 from .models import Comment
 from .forms import CommentForm
 
 # Create your views here.
+
+logging.config.fileConfig(fname='logs/log.conf')
+logger = logging.getLogger('comments')
 
 def comment_delete(request,id):
     try:
@@ -22,6 +27,7 @@ def comment_delete(request,id):
 
     if request.method == 'POST':
         parent_object_url = comment_delete.content_object.get_absolute_url()
+        logger.info(f'{request.user} deleted {comment_delete.content}')
         comment_delete.delete()
         messages.success(request,'Comment has been deleted')
         return HttpResponseRedirect(parent_object_url)
@@ -70,6 +76,7 @@ def comment_thread(request,id):
                                     content =content_data,
                                     parent = parent_obj,
         )
+        logger.info(f'{request.user} commented {new_comment.content}.')
         return HttpResponseRedirect(new_comment.content_object.get_absolute_url())
     context = {'comment':comment,'form':form}
     return render(request,'comments/comment_thread.html',context=context)

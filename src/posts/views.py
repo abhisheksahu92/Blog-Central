@@ -7,6 +7,9 @@ from django.urls import reverse
 from django.db.models import Q,F
 from django.core.paginator import Paginator
 from django.utils import timezone
+from faker import Faker
+import logging
+import logging.config
 
 from .models import Post
 from .forms import PostForm
@@ -17,8 +20,12 @@ from comments.forms import CommentForm
 
 # Create your views here.
 
+logging.config.fileConfig(fname='logs/log.conf')
+logger = logging.getLogger('posts')
+
 def post_index(request,slug = None):
     qs_list = Post.objects.all()
+    logger.info(f'{qs_list.count()} posts listed.')
     if slug is not None:
         qs_list = Post.objects.filter(category__icontains=slug)
     query = request.GET.get("q")
@@ -38,21 +45,25 @@ def post_index(request,slug = None):
 
 def post_create(request):
     if not request.user.is_authenticated:
+        logger.error(f'Not Authenticated')
         return HttpResponse('You are not authenticated')
     form = PostForm(request.POST or None,request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.user = request.user
         instance.save()
-        messages.success(request,'Post created.')
+        logger.info(f'Post created by {request.user} with title {instance.title}')
+        messages.success(request,'Post created. ')
         return HttpResponseRedirect(instance.get_absolute_url())
     context = {'form':form}
     return render(request,template_name='posts/create.html',context=context)
 
 def post_list(request):
     if not request.user.is_authenticated:
+        logger.error(f'Not Authenticated')
         return HttpResponse('You are not authenticated')
     qs_list = Post.objects.filter(user=request.user)
+    logger.info(f'{request.user} listed {qs_list.count()} posts.')
     query = request.GET.get("q")
     if query:
         qs_list = qs_list.filter(
@@ -74,11 +85,18 @@ def post_details(request,slug=None):
         Http404
     qs_details = queryset[0]
     if qs_details.draft or qs_details.publish > timezone.now().date():
-        if not request.user.is_authenticated:
-            return HttpResponse('You are not authenticated')
+        Http404
+    if not request.user.is_authenticated:
+        return HttpResponse('You are not authenticated')
     if request.method == 'GET':
         queryset.update(views_count = F('views_count') + 1)
     qs_details.refresh_from_db()
+
+    category = qs_details.category
+    print(category)
+    queryset_category = Post.objects.filter(category=category).order_by("-views_count")
+    if queryset_category.count() > 3:
+        queryset_category = queryset_category[:3]
 
     initial_data = {'content_type':qs_details.get_content_type,'object_id':qs_details.id}
     form = CommentForm(request.POST or None,initial=initial_data)
@@ -106,10 +124,11 @@ def post_details(request,slug=None):
                                     content =content_data,
                                     parent = parent_obj,
         )
+        logger.info(f'{request.user} commented {new_comment.content}.')
         return HttpResponseRedirect(new_comment.content_object.get_absolute_url())
 
     comments = qs_details.comment
-    context = {'query':qs_details,'title':qs_details.title,'comments':comments,'comment_form':form}
+    context = {'query':qs_details,'title':qs_details.title,'comments':comments,'comment_form':form,'queryset_category':queryset_category}
     return render(request,template_name='posts/details.html',context=context)
 
 def post_update(request,slug=None):
@@ -120,6 +139,7 @@ def post_update(request,slug=None):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        logger.info(f'{request.user} updated {instance.title}.')
         return HttpResponseRedirect(instance.get_absolute_url())
     context = {'query':qs_update,'title':qs_update.title,'form':form}
     return render(request,template_name='posts/edit.html',context=context)
@@ -140,6 +160,7 @@ def post_delete(request,slug=None):
 
     if request.method == 'POST':
         qs_delete.delete()
+        logger.info(f'{request.user} deleted {qs_delete}.')
         messages.success(request,'Post has been deleted')
         return HttpResponseRedirect(reverse('posts:postlist'))
 

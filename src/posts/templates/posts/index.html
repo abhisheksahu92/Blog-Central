@@ -3,8 +3,8 @@
 {% load static %}
 
 <!-- Search form -->
-            <div class="row tm-row">
-                <div class="col-12">
+            <div class="row tm-row" width="1300">
+                <div class="col-10">
                     <form method="GET" action="#" class="form-inline tm-mb-80 tm-search-form">
                         <input class="form-control tm-search-input" name="q" type="text" placeholder="Search..." aria-label="Search">
                         <button class="tm-search-button" type="submit">
@@ -12,17 +12,30 @@
                         </button>
                     </form>
                 </div>
-            </div>
-            <div class="row tm-row">
+<!--                <div class="col-12">-->
+<!--                <ul class="tm-mb pl tm-category-list">-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='general' %}" class="tm-pt tm-color-primary tm-post-title">General</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='entertainment' %}" class="tm-pt-20 tm-color-primary tm-post-title">Entertainment</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='travel' %}" class="tm-pt-20 tm-color-primary tm-post-title">Travel</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='photography' %}" class="tm-pt-20 tm-color-primary tm-post-title">Photography</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='technology' %}" class="tm-pt-20 tm-color-primary tm-post-title">Technology</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='fashion' %}" class="tm-pt-20 tm-color-primary tm-post-title">Fashion</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='design' %}" class="tm-pt-20 tm-color-primary tm-post-title">Design</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='history' %}" class="tm-pt-20 tm-color-primary tm-post-title">History</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='general' %}" class="tm-pt-20 tm-color-primary tm-post-title">Education</a> |-->
+<!--                    <a href="{% url 'posts:postindexcategory' slug='general' %}" class="tm-pt-20 tm-color-primary tm-post-title">Lifestyle</a>-->
+<!--                </ul>-->
+<!--                </div>-->
+
                 {% for post in queryset %}
                     <article class="col-12 col-md-6 tm-post">
                         <hr class="tm-hr-primary">
                         <a href="{{ post.get_absolute_url }}" class="effect-lily tm-post-link tm-pt-20">
                             <div class="tm-post-link-inner">
                                 {% if post.image %}
-                                <img src="{{ post.image.url }}" alt="Image" class="img-fluid">
+                                <img src="{{ post.image.url }}" alt="Image"  width="500" height="300">
                                 {% else %}
-                                <img src="{% static 'img/img-05.jpg' %}" alt="Image" class="img-fluid">
+                                <img src="{% static 'img/img-05.jpg' %}" alt="Image"  width="500" height="300">
                                 {% endif %}
                             </div>
 
@@ -55,6 +68,5 @@
                     {% endif %}
                 </div>
             </div>
-
 
 {% endblock content %}
