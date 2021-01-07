@@ -10,7 +10,7 @@ body {
 	padding: 0;
 	background: #DAE2CF url(images/img01.jpg) repeat-x left top;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 10pt;
+	font-size: 11pt;
 	color: #3B3B3B;
 }
 
@@ -208,6 +208,7 @@ a:hover {
 #content {
 	float: left;
 	width: 620px;
+	font-size: 12px;
 }
 
 .post {

@@ -1,55 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-Design by TEMPLATED
-http://templated.co
-Released for free under the Creative Commons Attribution License
-
-Name       : Forthright
-Description: A two-column, fixed-width design with dark color scheme.
-Version    : 1.0
-Released   : 20130409
-
--->
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="keywords" content=""/>
-    <meta name="description" content=""/>
-    {% load static %}
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Forthright by TEMPLATED</title>
-    <meta name="google" content="notranslate" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-            crossorigin="anonymous" />
-    <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear"
-          rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-</head>
-<body>
-<div id="menu-wrapper">
-    <div id="menu">
-        <ul>
-            <li class="current_page_item"><a href="{% url 'posts:postindex'%}">Homepage</a></li>
-            <li><a href="{% url 'posts:postcreate'%}">Create</a></li>
-            {% if request.user.is_authenticated%}
-            <li><a href="{% url 'posts:postlist'%}">Your Blogs</a></li>
-            <li><a href="{% url 'accounts:logout'%}">Logout</a></li>
-            {% else %}
-            <li><a href="{% url 'accounts:login'%}">Login</a></li>
-            <li><a href="{% url 'accounts:register'%}">Register</a></li>
-            {% endif %}
-            <li><a href="{% url 'posts:contact'%}">Contact</a></li>
-        </ul>
-    </div>
-    <!-- end #menu -->
-</div>
-<div id="header-wrapper">
-    <div id="header">
-        <div id="logo">
-            <h1><a href="#">Blog Central</h1>
-        </div>
-    </div>
-</div>
+{% extends "posts/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
 <div class="container">
     <div class="row">
         <!-- Blog Entries Column -->
@@ -58,38 +9,12 @@ Released   : 20130409
                 <div class="card-body">
                     <h3 class="card-title">Created by: Abhishek Sahu </h3>
                     <h3 class="card-title">Email: abhisheksahu92@outlook.com </h3>
-                    <p>Follow US on <a class="card-text" href="#">Github</a>
-                    <a class="card-text" href="#">LinkedIn</a>
+                    <p>Follow US on <a class="card-text" href="https://github.com/abhisheksahu92">Github</a>
+                    <a class="card-text" href="https://www.linkedin.com/in/namabhi1207/">LinkedIn</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div id="footer">
-    <p>&copy; Untitled. | Design by Abhishek Sahu.</p>
-</div>
-<!-- end #footer -->
-
-<script type='text/javascript'>
-	$(".content-markdown").each(function(){
-		var content = $(this).text()
-		var markedContent = marked(content)
-		$(this).html(markedContent)
-		})
-	$(".post-detail-item img").each(function(){
-		this.width = 650
-		this.height = 400
-		$(this).addClass("img-responsive");
-
-		})
-
-	$(".comment-reply-btn").click(function(event){
-	event.preventDefault();
-	$(this).parent().next(".comment-reply").fadeToggle();
-	})
-
-
-</script>
-</body>
-</html>
+{% endblock content %}

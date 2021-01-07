@@ -29,7 +29,7 @@ def post_index(request,slug = None):
             Q(user__first_name__icontains=query) |
             Q(user__last_name__icontains=query)
         ).distinct()
-    paginator = Paginator(qs_list, 3)
+    paginator = Paginator(qs_list, 4)
     page_request_var = 'page'
     page_number = request.GET.get(page_request_var)
     page_obj = paginator.get_page(page_number)
@@ -113,6 +113,8 @@ def post_details(request,slug=None):
     return render(request,template_name='posts/details.html',context=context)
 
 def post_update(request,slug=None):
+    if not request.user.is_authenticated:
+        return HttpResponse('You are not authenticated')
     qs_update = get_object_or_404(Post,slug=slug)
     form = PostForm(request.POST or None,request.FILES or None,instance=qs_update)
     if form.is_valid():
@@ -123,10 +125,26 @@ def post_update(request,slug=None):
     return render(request,template_name='posts/edit.html',context=context)
 
 def post_delete(request,slug=None):
-    qs_delete = get_object_or_404(Post,slug=slug)
-    qs_delete.delete()
-    messages.success(request,'Succesfully deleted.')
-    return HttpResponseRedirect(reverse('posts:postlist'))
+    try:
+        qs_delete = get_object_or_404(Post,slug=slug)
+    except:
+        raise Http404('This is not present')
+
+    if not request.user.is_authenticated:
+        return HttpResponse('You are not authenticated')
+
+    if qs_delete.user != request.user:
+        response = HttpResponse("you dont have permission to view this.")
+        response.status_code = 403
+        return response
+
+    if request.method == 'POST':
+        qs_delete.delete()
+        messages.success(request,'Post has been deleted')
+        return HttpResponseRedirect(reverse('posts:postlist'))
+
+    context = {'qs_delete':qs_delete}
+    return render(request,'posts/post_delete.html',context=context)
 
 def contact(request):
     return render(request,template_name='posts/contact.html')

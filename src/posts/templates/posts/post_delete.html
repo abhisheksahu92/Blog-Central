@@ -14,9 +14,9 @@
                         <div class="card-body">
                             <h1>Confirm Delete</h1>
                             <form action="" method="POST"> {% csrf_token %}
-                                <p>Are you sure you want to delete: "{{ comment_delete.content }}"?</p>
+                                <p>Are you sure you want to delete: "{{ qs_delete.title }}"?</p>
                                 <input class='btn btn-warning' type='submit' value='Confirm'>
-                                <a class='btn btn-default' href='{{ comment_delete.get_absolute_url }}'>Cancel</a>
+                                <a class='btn btn-default' href='{{ qs_delete.get_absolute_url }}'>Cancel</a>
                             </form>
                         </div>
                     </div>
