@@ -1,21 +1,17 @@
-# TryDjango19
+# Blog Central
 
-# Packed Used:
-
-asgiref==3.3.1<br/>
-beautifulsoup4==4.9.3<br/>
-bootstrap4==0.1.0<br/>
-Django==3.1.4<br/>
-django-bootstrap4==2.3.1<br/>
-django-crispy-forms==1.10.0<br/>
-django-forms-bootstrap==3.1.0<br/>
-Pillow==8.0.1<br/>
-pytz==2020.4<br/>
-soupsieve==2.1<br/>
-sqlparse==0.4.1<br/>
+A blog platorm to view,update,create and delete the blogs using web browser or Rest based application.
 
 # Steps:
 
-1: Install Docker. <br/>
+1: Install Docker and docker-compose. <br/>
 2: Run docker compose up --build <br/>
 3: Go to browser and enter http://127.0.0.1:8000/posts/. <br/>
+
+# URLs
+
+1: to list all blogs:            http://127.0.0.1:8000/posts/<br/>
+2: to list all your blogs:       http://127.0.0.1:8000/posts/list<br/>
+3: to create new blogs:          http://127.0.0.1:8000/posts/create<br/>
+4: to register new user:         http://127.0.0.1:8000/accounts/register<br/>
+4: to login into your account:   http://127.0.0.1:8000/accounts/login<br/>
