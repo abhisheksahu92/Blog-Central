@@ -1,22 +1,9 @@
 {% extends "posts/base.html" %}
-{% block head_extra %}
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-<meta content="notranslate" name="google"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      rel="stylesheet"/>
-<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear" rel="stylesheet"
-      type="text/css"/>
-{% endblock head_extra %}
+
 
 {% block content %}
 {% load crispy_forms_tags %}
-<div id="wrapper">
-    <!-- end #header -->
-    <div id="page">
-        <div id="page-bgtop">
-            <div id="page-bgbtm">
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-20 card mb-4  mt-3 left  top">
@@ -44,7 +31,7 @@
                                             <form action="" method="POST"> {% csrf_token %}
                                                 {{ form|crispy }}
                                                 <input name='parent_id' type='hidden' value='{{ comment.id }}'>
-                                                <input class='btn btn-default' type='submit' value='Reply'>
+                                                <input class='mb-2 tm-btn tm-btn-primary tm-prev-next' type='submit' value='Reply'>
                                             </form>
                                             {% else %}
                                             <p>You must login to comment </p>
@@ -56,9 +43,5 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 {% endblock content %}

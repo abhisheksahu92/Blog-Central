@@ -15,5 +15,6 @@ class PostForm(forms.ModelForm):
             'content',
             'draft',
             'category',
+            'image',
             'publish'
         ]

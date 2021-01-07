@@ -6,3 +6,9 @@
 2021-01-01 11:20:28,824 - accounts - INFO - 50 User Data Created
 2021-01-01 15:53:02,127 - accounts - INFO - User Data Creating..
 2021-01-01 15:53:03,296 - accounts - INFO - 10 User Data Created
+2021-01-08 00:09:04,750 - accounts - INFO - AnonymousUser logged out.
+2021-01-08 00:09:40,019 - accounts - INFO - asahu authenticated
+2021-01-08 00:09:51,407 - accounts - INFO - asahu logged out.
+2021-01-08 00:10:24,206 - accounts - INFO - New User got created with AnonymousUser
+2021-01-08 00:11:47,090 - accounts - INFO - New User got created with asahu4
+2021-01-08 00:15:25,412 - accounts - INFO - asahu authenticated

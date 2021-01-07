@@ -1,100 +1,125 @@
 {% extends "posts/base.html" %}
-{% block head_extra %}
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-<meta content="notranslate" name="google"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      rel="stylesheet"/>
-<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear" rel="stylesheet"
-      type="text/css"/>
-{% endblock head_extra %}
-
 {% block content %}
-<div id="wrapper">
-    <!-- end #header -->
-    <div id="page">
-        <div id="page-bgtop">
-            <div id="page-bgbtm">
-                <!--                start content-->
-                {% load crispy_forms_tags %}
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-20 card mb-4  mt-3 left  top">
-                            <div class="card-body">
-                                <p class="h1">{% block head_title %}{{query.title}}{% endblock head_title %}</p>
-                                <em><strong><p>Read time: {% if query.read_time <= 1 %} < 1 Minute {% else %}{{
-                                    query.read_time }} minutes {% endif %}| Views: {{ query.views_count }}</p></strong></em>
-                                {% if query.image %}
-                                <img height="400" src='{{ query.image.url }}' width="850"/>
-                                {% endif %}
-                                <p>
-                                    {% if query.draft%}
-                                    <span style='color:red;'>Draft</span>
-                                    {% endif %}
-                                </p>
-                                <div class='post-detail-item'>{{ query.get_markdown }}</div>
-                                {% if query.user.get_full_name %}
-                                <strong><p class=" text-muted">Author: {{ query.user.get_full_name }} | {{ query.publish }}</p></strong>
-                                {% endif %}
+{% load static %}
+{% load crispy_forms_tags %}
+<div class="row tm-row">
+    <div class="col-lg-9 tm-post-col">
+        <div class="tm-post-full">
+            <div class="mb-4">
 
-                                <hr/>
-                                <p class='lead'>Comments</p>
-                                {% if request.user.is_authenticated %}
-                                <form action="" method="POST"> {% csrf_token %}
-                                    <p>{{ comment_form | crispy }}</p>
-                                    <input class='btn btn-default' type='submit' value='Post comment'>
-                                </form>
-                                {% else %}
-                                <p>You must login to comment </p>
-                                {% endif %}
-                                <hr/>
+                    <a href="#" class="effect-lily tm-post-link tm-pt-20">
 
-                                {% for comment in comments %}
-                                <div class="card mb-4">
-                                    <div class="card-body">
-                                        <h3 class="card-title">{{ comment.user.get_full_name}}</h3>
-                                        <p class="card-text text-muted h6">{{ comment.timestamp}} </p>
-                                        <p class="card-text">{{ comment.content }}</p>
-
-                                        <footer>{% if comment.children.count > 0 %}{{ comment.children.count }}
-                                            Comment{% if comment.children.count > 1 %}s{% endif %} | {% endif %} <a
-                                                    class='comment-reply-btn' href='#'>Reply</a> | <a class=''
-                                                                                                      href='{{ comment.get_absolute_url }}'>Thread</a>
-                                        </footer>
-                                        <div class='comment-reply' style='display:none;'>
-                                            {% for child_comment in comment.children %}
-                                            <div class="alert alert-primary" role="alert">
-                                                <p>{{ child_comment.content }}</p>
-                                                <footer>via {{ child_comment.user.get_full_name }} | {{
-                                                    child_comment.timestamp|timesince }} ago
-                                                </footer>
-                                            </div>
-                                            <hr/>
-                                            {% endfor %}
-                                            {% if request.user.is_authenticated %}
-                                            <form action="" method="POST"> {% csrf_token %}
-                                                {{ comment_form }}
-                                                <input name='parent_id' type='hidden' value='{{ comment.id }}'>
-                                                <input class='btn btn-default' type='submit' value='Reply'>
-                                            </form>
-                                            {% else %}
-                                            <p>You must login to comment </p>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+                    <div class="tm-post-link-inner">
+                        {% if query.image %}
+                    <img src="{{ query.image.url }}" alt="Image" class="img-fluid">
+                        {% else %}
+                        <img src="{% static 'img/img-05.jpg' %}" alt="Image" class="img-fluid">
+                        {% endif %}
                     </div>
+                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ query.title }}</h2>
+                    </a>
+
+
+                <p class="tm-mb-40">{{ query.publish }} posted by <strong>{{ query.user.get_full_name }}</strong></p>
+                <p>{{ query.content }}</p>
+                <p>
+                    {% if query.draft%}
+                        <span style='color:red;'>Draft</span>
+                    {% endif %}
+                </p>
+                <div class="d-flex justify-content-between">
+                    <span class="mb-2 tm-btn tm-btn-primary tm-prev-next"><a href="{{ query.get_absolute_url_update }}" class="tm-color-primary">Update</a></span>
+                    <span class="mb-2 tm-btn tm-btn-primary tm-prev-next"><a href="{{ query.get_absolute_url_delete }}" class="tm-color-primary">Delete</a></span>
+                    <span class="mb-2 tm-btn tm-btn-primary tm-prev-next"><a href="{% url 'posts:postindexcategory' slug=query.category %}" class="tm-color-primary">Category: {{ query.category|title }}</a></span>
                 </div>
+
             </div>
-            <div style="clear: both;">&nbsp;</div>
+
+            <!-- Comments -->
+            <div>
+                <h2 class="tm-color-primary tm-post-title">Comments</h2>
+                <hr class="tm-hr-primary tm-mb-45">
+                {% for comment in comments %}
+                    <div class="card mb-4">
+                    <div class="card-body">
+                    <h3 class="card-title">{{ comment.user.get_full_name}}</h3>
+                    <p class="card-text text-muted h6">{{ comment.timestamp}} </p>
+                    <p class="card-text">{{ comment.content }}</p>
+
+                    <footer>{% if comment.children.count > 0 %}{{ comment.children.count }}
+                    Comment{% if comment.children.count > 1 %}s{% endif %} | {% endif %} <a
+                            class='comment-reply-btn' href='#'>Reply</a> | <a class=''
+                                                                              href='{{ comment.get_absolute_url }}'>Thread</a>
+                    </footer>
+                    <div class='comment-reply' style='display:none;'>
+                    {% for child_comment in comment.children %}
+                    <div class="alert alert-primary" role="alert">
+                        <p>{{ child_comment.content }}</p>
+                        <footer>via {{ child_comment.user.get_full_name }} | {{ child_comment.timestamp|timesince }} ago
+                        </footer>
+                    </div>
+                    <hr/>
+                    {% endfor %}
+                    {% if request.user.is_authenticated %}
+                    <form action="" method="POST"> {% csrf_token %}
+                        {{ comment_form|crispy }}
+                        <input name='parent_id' type='hidden' value='{{ comment.id }}'>
+                        <input class='mb-2 tm-btn tm-btn-primary tm-prev-next' type='submit' value='Reply'>
+                    </form>
+                    {% else %}
+                    <p>You must login to comment </p>
+                    {% endif %}
+                    </div>
+                    </div>
+                    </div>
+                {% endfor %}
+                {% if request.user.is_authenticated %}
+                    <form action="" method="POST"> {% csrf_token %}
+                        {{ comment_form|crispy }}
+                        <input name='parent_id' type='hidden' value='{{ comment.id }}'>
+                        <input class='mb-2 tm-btn tm-btn-primary tm-prev-next' type='submit' value='Reply'>
+                    </form>
+                    {% else %}
+                    <p>You must login to comment </p>
+                    {% endif %}
+
+            </div>
         </div>
     </div>
+    <aside class="col-lg-3 tm-aside-col">
+        <div class="tm-post-sidebar">
+            <hr class="mb-3 tm-hr-primary">
+            <h2 class="mb-4 tm-post-title tm-color-primary">Categories</h2>
+            <ul class="tm-mb-75 pl-2 tm-category-list">
+                <li><a href="{% url 'posts:postindexcategory' slug='general' %}" class="tm-color-primary">General</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='music' %}" class="tm-color-primary">Music</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='travel' %}" class="tm-color-primary">Travel</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='photography' %}" class="tm-color-primary">Photography</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='technology' %}" class="tm-color-primary">Technology</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='fashion' %}" class="tm-color-primary">Fashion</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='car' %}" class="tm-color-primary">Car</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='design' %}" class="tm-color-primary">Design</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='movie' %}" class="tm-color-primary">Movie</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='history' %}" class="tm-color-primary">History</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='general' %}" class="tm-color-primary">Education</a></li>
+                <li><a href="{% url 'posts:postindexcategory' slug='general' %}" class="tm-color-primary">Lifestyle</a></li>
+            </ul>
+            <hr class="mb-3 tm-hr-primary">
+            <h2 class="tm-mb-40 tm-post-title tm-color-primary">Related Posts</h2>
+            {% for category in queryset_category %}
+            <a href="{{ post.get_absolute_url }}" class="d-block tm-mb-40">
+                <figure>
+                    {% if post.image %}
+                    <img src="{{ query.image.url }}" alt="Image" class="mb-3 img-fluid">
+                    {% else %}
+                    <img src="{% static 'img/img-05.jpg' %}" alt="Image" class="img-fluid">
+                    {% endif %}
+                    <figcaption class="tm-color-primary">{{ category.title }}</figcaption>
+                    <figcaption class="tm-color-primary">{{ category.get_markdown | truncatechars_html:100 }}</figcaption>
+                </figure>
+            </a>
+            {% endfor %}
+        </div>
+    </aside>
 </div>
-<!-- end #page -->
-</div>
-
 {% endblock content %}

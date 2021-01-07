@@ -1,0 +1,31 @@
+{% extends "posts/base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<div id="wrapper">
+    <!-- end #header -->
+    <div id="page">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-20 card mb-4  mt-3 left  top">
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h1>Confirm Delete</h1>
+                            <form action="" method="POST"> {% csrf_token %}
+                                <p>Are you sure you want to delete: "{{ qs_delete.title }}"?</p>
+                                <input class='btn btn-warning' type='submit' value='Confirm'>
+                                <a class='btn btn-default' href='{{ qs_delete.get_absolute_url }}'>Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+{% endblock content %}
